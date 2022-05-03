@@ -5,6 +5,7 @@ import java.util.Scanner;
 import src.edd.Arboljuego;
 import src.edd.Ficha;
 import src.edd.VerticeArbolBinario;
+import src.edd.Arboljuego.Vertice;
 
 import java.util.Random;
 import java.util.Iterator;
@@ -420,7 +421,36 @@ public class Encerrado{
                     System.out.println("Tablero despues de tirar");
                     muestraTablero(tablero);
                 }else{
-                    minimax(rojos,tablero);
+                    //si las dos fichas se pueden mover hacemos minimax
+                    boolean pieza1=verificaTirada(rojos[0],blanca, tablero);
+                    boolean pieza2=verificaTirada(rojos[1],blanca, tablero);
+                    if(pieza1&&pieza2){
+                        minimax(rojos,azules,tablero,blanca);
+                        System.out.println("Tablero despues de tirar");
+                        muestraTablero(tablero);
+                    }else if(pieza1||pieza2){//si solo se puede mover una pieza la movemos
+                        int aux=0;
+                        if(pieza2){
+                            aux=1;
+                        }
+                        int posPiezaX=rojos[aux].posicionX;
+                        int posPiezaY=rojos[aux].posicionY;
+                        //En la posicion dode estaba la pieza ponemos a la pieza blanca
+                        tablero[posPiezaX][posPiezaY]=blanca;
+                        //En donde estaba la pieza blanca ponemos la pieza roja
+                        tablero[blanca.posicionX][blanca.posicionY]=rojos[aux];
+                        //cambiamos los atributos de posicion de la pieza roja
+                        rojos[aux].posicionX=blanca.posicionX;
+                        rojos[aux].posicionY=blanca.posicionY;
+                        //cambiamos los atributos de posicion de la pieza blanca
+                        blanca.posicionX=posPiezaX;
+                        blanca.posicionY=posPiezaY;
+                    }else{
+                        noTermina=false;
+                        System.out.println("No hay movimientos disponibles para la computadora");
+                        return "Jugador";
+                    }
+                    
                 }
                 actual=2;
             }else{//turno del jugaador
@@ -489,27 +519,116 @@ public class Encerrado{
         return "";
     }
 
-    public static void minimax(Ficha[] rojos, Ficha[][] tablero){
+    public static void minimax(Ficha[] rojos, Ficha[] azules, Ficha[][] tablero, Ficha blanca){
         //Hacemos copias para trabajar sobre ellos
         Ficha[][] copiaTablero=new Ficha[3][3];
         Ficha[] copiaRojos=new Ficha[2];
+        Ficha[] copiaAzules=new Ficha[2];
         for(int i=0;i<3;i++){
             for(int j=0;j<3;j++){
-                copiaTablero[i][j]=tablero[i][j].clone();
+                if(tablero[i][j]!=null){
+                    copiaTablero[i][j]=tablero[i][j].clone();
+                }
             }
         }
         copiaRojos[0]=rojos[0].clone();
         copiaRojos[1]=rojos[1].clone();
+        copiaAzules[0]=azules[0].clone();
+        copiaAzules[1]=azules[1].clone();
+        Ficha copiaBlanca=new Ficha("blanco",0,blanca.posicionX, blanca.posicionY);
 
-        Arboljuego<Integer> arbol=new Arboljuego<Integer>();
-        recursivo(arbol,copiaTablero,copiaRojos);
-    }
-
-    public static void recursivo(Arboljuego<Integer> arbol, Ficha[][] tablero, Ficha[] rojos){
-        if(arbol.isEmpty()){
-            arbol.raiz=arbol.new Vertice(-2);
+        Arboljuego arbol=new Arboljuego();
+        arbol.raiz=arbol.nuevoVertice(-2);
+        recursivo(arbol,copiaTablero,copiaRojos,copiaAzules,0,copiaBlanca, arbol.raiz);
+        System.out.println(arbol);
+        int aux=0;//la posicion del arreglo
+        if(arbol.raiz.derecho.elemento>arbol.raiz.izquierdo.elemento){
+            aux=1;
         }
+        int posPiezaX=rojos[aux].posicionX;
+        int posPiezaY=rojos[aux].posicionY;
+        tablero[posPiezaX][posPiezaY]=blanca;
+        tablero[blanca.posicionX][blanca.posicionY]=rojos[aux];
+        rojos[aux].posicionX=blanca.posicionX;
+        rojos[aux].posicionY=blanca.posicionY;
+        blanca.posicionX=posPiezaX;
+        blanca.posicionY=posPiezaY;
     }
+
+    public static void recursivo(Arboljuego arbol, Ficha[][] tablero, Ficha[] rojos, Ficha[] azules, int profundidad, Ficha blanca, Vertice r){
+        //if(arbol.isEmpty()){
+          //  arbol.raiz=r;
+        //}else{
+            //System.out.println("else");
+            Ficha[] arrActual=rojos;//Si la profundidad es par, vamos a verificar si la computadora (fichas rojas ) se pueden mover
+            if(profundidad%2==1){//Si la profundidad es impar, vamos a verificar si la computadora (fichas rojas ) se pueden mover
+                arrActual=azules;
+                //System.out.println("Verificando azules en profundidad "+profundidad);
+            }else{
+                //System.out.println("verificando rojas en profundidad");
+            }
+            //2 casos base y caso recursivo
+            System.out.println(profundidad);
+            if(profundidad==11){
+                //System.out.println("Caso base profundidad 11");
+                r.elemento=0;
+                if(r.hayPadre()&&r.padre.elemento<0){
+                    r.padre.elemento=0;
+                }
+                //System.out.println("Elemento de r: "+r.elemento);
+            }else if(!verificaTirada(arrActual[0], blanca, tablero)&&!verificaTirada(arrActual[1], blanca, tablero)){
+                //System.out.println("Caso base porque ya no hay tiradas");
+                if(arrActual[0].color==rojo){//si el que se quedó sin movimientos es el rojo es porque la computadora pierde, por lo que le damos un valor negativo
+                    r.elemento=-1;
+                }else if(arrActual[0].color==azul){//si el que se quedo sin movimientos es el azul es porque la computadora gana, por lo que le damos un valor positivo
+                    r.elemento=1;
+                }
+                if(r.hayPadre()&&r.padre.elemento<r.elemento){
+                    r.padre.elemento=r.elemento;
+                }
+                //System.out.println("Elem: "+r.elemento);
+            }else{
+                for(int i=0;i<2;i++){
+                    if(verificaTirada(arrActual[i], blanca, tablero)){
+
+                        //MOVEMOS TABLERO Y ARR DE FICHAS DEL COLOR QUE ESTAMOS VERIFICANDO
+                        //sacamos la posicion en la que se encuentra la piezaa mover actualmente
+                        int posPiezaX=arrActual[i].posicionX;
+                        int posPiezaY=arrActual[i].posicionY;
+                        //En la posicion dode estaba la pieza ponemos a la pieza blanca
+                        tablero[posPiezaX][posPiezaY]=blanca;
+                        //En donde estaba la pieza blanca ponemos la pieza que queriamos mover
+                        tablero[blanca.posicionX][blanca.posicionY]=arrActual[i];
+                        //cambiamos los atributos de posicion de la pieza que se movio
+                        arrActual[i].posicionX=blanca.posicionX;
+                        arrActual[i].posicionY=blanca.posicionY;
+                        //cambiamos los atributos de posicion de la pieza blanca
+                        blanca.posicionX=posPiezaX;
+                        blanca.posicionY=posPiezaY;
+                        //Hacemos el vertice que agregaremos al arbol
+                        Arboljuego.Vertice nuevo=arbol.nuevoVertice(-2);
+                        if(i==0){//Si es la primera pieza en el arreglo, ponemos el vertice a la izquierda de r
+                            r.izquierdo=nuevo;
+                        }else{//Si es la segunda pieza en el tablero, ponemos el vertice a la derecha de r
+                            r.derecho=nuevo;
+                        }
+                        nuevo.padre=r;
+                        recursivo(arbol, tablero, rojos,azules, profundidad+1, blanca, nuevo);
+                        if(r.elemento<nuevo.elemento){
+                            r.elemento=nuevo.elemento;
+                        }
+                        //Volvemos el arreglo y el tablero a como estaban antes
+                        blanca.posicionX=arrActual[i].posicionX;
+                        blanca.posicionY=arrActual[i].posicionY;
+                        tablero[blanca.posicionX][blanca.posicionY]=blanca;
+                        arrActual[i].posicionX=posPiezaX;
+                        arrActual[i].posicionY=posPiezaY;
+                        tablero[posPiezaX][posPiezaY]=arrActual[i];
+                    }
+                }
+            }
+        }
+    //}
 
     /**
      * 

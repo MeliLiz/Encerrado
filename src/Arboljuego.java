@@ -14,29 +14,31 @@ import java.util.Iterator;
  * deja la implementación de varias en manos de las subclases concretas.
  * </p>
  */
-public class Arboljuego<T>{
+public class Arboljuego{
     /**
      * Clase interna protegida para vértices.
      */
-    protected class Vertice implements VerticeArbolBinario<T> {
+    public class Vertice implements VerticeArbolBinario<Integer> {
 
         /** El elemento del vértice. */
-        public T elemento;
+        public Integer elemento;
         /** El padre del vértice. */
         public Vertice padre;
         /** El izquierdo del vértice. */
         public Vertice izquierdo;
         /** El derecho del vértice. */
         public Vertice derecho;
-        public String color;
+        //public String color;
 
         /**
          * Constructor único que recibe un elemento.
          * @param elemento el elemento del vértice.
          */
-        public Vertice(T elemento) {
-          if(elemento!=null)
+        public Vertice(Integer elemento) {
+          if(elemento!=null){
              this.elemento=elemento;
+          }
+          //this.color=color;
         }
 
         /**
@@ -71,7 +73,7 @@ public class Arboljuego<T>{
          * @return el vértice padre del vértice.
          * @throws NoSuchElementException si el vértice no tiene padre.
          */
-        @Override public VerticeArbolBinario<T> padre() {
+        @Override public VerticeArbolBinario<Integer> padre() {
             if (padre == null){
                 throw new NoSuchElementException("El vértice no tiene padre.");
             }
@@ -83,7 +85,7 @@ public class Arboljuego<T>{
          * @return el vértice izquierdo del vértice.
          * @throws NoSuchElementException si el vértice no tiene izquierdo.
          */
-        @Override public VerticeArbolBinario<T> izquierdo() {
+        @Override public VerticeArbolBinario<Integer> izquierdo() {
             if (izquierdo == null){
                 throw new NoSuchElementException("El vértice no tiene izquierdo.");
             }
@@ -95,7 +97,7 @@ public class Arboljuego<T>{
          * @return el vértice derecho del vértice.
          * @throws NoSuchElementException si el vértice no tiene derecho.
          */
-        @Override public VerticeArbolBinario<T> derecho() {
+        @Override public VerticeArbolBinario<Integer> derecho() {
             if (derecho == null){
                 throw new NoSuchElementException("El vértice no tiene derecho.");
             }
@@ -104,9 +106,9 @@ public class Arboljuego<T>{
 
         /**
          * Regresa el elemento del vértice.
-         * @return T elemento
+         * @return Integer elemento
          */
-        @Override public T get() {
+        @Override public Integer get() {
             return elemento;
         }
 
@@ -210,7 +212,7 @@ public class Arboljuego<T>{
     }
 
     //Clase privada para un iterador de árboles bst
-    private class Iterador implements Iterator<T>{
+    private class Iterador implements Iterator<Integer>{
         //pila para ir almacenando los elemetos. primero los de la izq y luego los de la derecha
         Pila<Vertice> pila=new Pila<Vertice>();
         /**
@@ -243,12 +245,12 @@ public class Arboljuego<T>{
          * @throws NoSuchElementException
          */
         @Override
-        public T next(){
+        public Integer next(){
             if(!hasNext()){
                 throw new NoSuchElementException();
             }
             Vertice vertice=pila.pop();
-            T elemento=vertice.elemento;
+            Integer elemento=vertice.elemento;
             if(vertice.hayDerecho()){
                 vertice=vertice.derecho;
                 while(vertice!=null){
@@ -287,7 +289,7 @@ public class Arboljuego<T>{
      * @param elemento el elemento dentro del vértice.
      * @return un nuevo vértice con el elemento recibido dentro del mismo.
      */
-    protected Vertice nuevoVertice(T elemento) {
+    protected Vertice nuevoVertice(Integer elemento) {
         return new Vertice(elemento);
     }
     
@@ -329,7 +331,7 @@ public class Arboljuego<T>{
      * @return <code>true</code> si el elemento está en el árbol;
      *         <code>false</code> en otro caso.
      */
-    public boolean contains(T elemento){
+    public boolean contains(Integer elemento){
         return busca(elemento) != null;
     }
 
@@ -342,11 +344,11 @@ public class Arboljuego<T>{
      *         <tt>null</tt> en otro caso.
      */
 
-    public VerticeArbolBinario<T> busca(T elemento){
+    public VerticeArbolBinario<Integer> busca(Integer elemento){
         return buscar(raiz,elemento);
     }
 
-    protected Vertice buscar(Vertice v, T elemento){
+    protected Vertice buscar(Vertice v, Integer elemento){
         if(v == null || elemento ==null){
             return null;
         }
@@ -366,7 +368,7 @@ public class Arboljuego<T>{
      * @return el vértice que contiene la raíz del árbol.
      * @throws NoSuchElementException si el árbol es vacío.
      */
-    public VerticeArbolBinario<T> raiz(){
+    public VerticeArbolBinario<Integer> raiz(){
         if (raiz ==null) {
             throw new NoSuchElementException();
         }
@@ -460,7 +462,7 @@ public class Arboljuego<T>{
             return false;
         }
         @SuppressWarnings("unchecked")
-        Arboljuego<T> arbol = (Arboljuego<T>)o;
+        Arboljuego arbol = (Arboljuego)o;
         if(isEmpty()){
             return arbol.isEmpty();
         }
@@ -478,7 +480,7 @@ public class Arboljuego<T>{
      * @throws ClassCastException si el vértice no es instancia de {@link
      *                            Vertice}.
      */
-    protected Vertice vertice(VerticeArbolBinario<T> vertice) {
+    protected Vertice vertice(VerticeArbolBinario<Integer> vertice) {
         return (Vertice) vertice;
     }
 
@@ -486,7 +488,7 @@ public class Arboljuego<T>{
      * Metodo que regresa un iterador
      * @return
      */
-    public Iterator<T> iterator(){
+    public Iterator<Integer> iterator(){
         return new Iterador();
     }
 }
