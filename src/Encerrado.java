@@ -538,11 +538,16 @@ public class Encerrado{
         Ficha copiaBlanca=new Ficha("blanco",0,blanca.posicionX, blanca.posicionY);
 
         Arboljuego arbol=new Arboljuego();
-        arbol.raiz=arbol.nuevoVertice(-2);
+        arbol.raiz=arbol.nuevoVertice(0);
         recursivo(arbol,copiaTablero,copiaRojos,copiaAzules,0,copiaBlanca, arbol.raiz);
         System.out.println(arbol);
         int aux=0;//la posicion del arreglo
-        if(arbol.raiz.derecho.elemento>arbol.raiz.izquierdo.elemento){
+        if(arbol.raiz.derecho.elemento==arbol.raiz.izquierdo.elemento){
+            Random random=new Random();
+            if(random.nextBoolean()){
+                aux=1;
+            }
+        }else if(arbol.raiz.derecho.elemento>arbol.raiz.izquierdo.elemento){
             aux=1;
         }
         int posPiezaX=rojos[aux].posicionX;
@@ -568,7 +573,7 @@ public class Encerrado{
                 //System.out.println("verificando rojas en profundidad");
             }
             //2 casos base y caso recursivo
-            System.out.println(profundidad);
+            //System.out.println(profundidad);
             if(profundidad==11){
                 //System.out.println("Caso base profundidad 11");
                 r.elemento=0;
@@ -606,7 +611,7 @@ public class Encerrado{
                         blanca.posicionX=posPiezaX;
                         blanca.posicionY=posPiezaY;
                         //Hacemos el vertice que agregaremos al arbol
-                        Arboljuego.Vertice nuevo=arbol.nuevoVertice(-2);
+                        Arboljuego.Vertice nuevo=arbol.nuevoVertice(0);
                         if(i==0){//Si es la primera pieza en el arreglo, ponemos el vertice a la izquierda de r
                             r.izquierdo=nuevo;
                         }else{//Si es la segunda pieza en el tablero, ponemos el vertice a la derecha de r
@@ -614,9 +619,18 @@ public class Encerrado{
                         }
                         nuevo.padre=r;
                         recursivo(arbol, tablero, rojos,azules, profundidad+1, blanca, nuevo);
-                        if(r.elemento<nuevo.elemento){
-                            r.elemento=nuevo.elemento;
+                        if(arrActual[0].color.equals(rojo)){
+                            if(nuevo.hayPadre()&&nuevo.padre.elemento<nuevo.elemento){
+                                nuevo.padre.elemento=nuevo.elemento;
+                            }
+                        }else if(arrActual[0].color.equals(azul)){
+                            if(nuevo.hayPadre()&&nuevo.padre.elemento>nuevo.elemento){
+                                nuevo.padre.elemento=nuevo.elemento;
+                            }
                         }
+                        //if(r.elemento<nuevo.elemento){
+                          //  r.elemento=nuevo.elemento;
+                        //}
                         //Volvemos el arreglo y el tablero a como estaban antes
                         blanca.posicionX=arrActual[i].posicionX;
                         blanca.posicionY=arrActual[i].posicionY;
