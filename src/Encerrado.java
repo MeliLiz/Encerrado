@@ -34,7 +34,7 @@ public class Encerrado{
         System.out.println("\n(1) Ver instrucciones");
         System.out.println("(2) Jugar");
         System.out.println("(3) Salir");
-        System.out.println("A lo largo del juego podrá teclear \"random\" para cambiar a modo random o \"minimax\" para cambiar a modo minimax");
+        System.out.println("A lo largo del juego podrá teclear -2 para cambiar el modo de juego");
         System.out.println("¡Disfrute el juego!");
 
         // Leer la respuesta
@@ -297,13 +297,17 @@ public class Encerrado{
         }
     }
 
+    /**
+     * Metodo para imprimir el tablero
+     * @param tablero
+     */
     public static void muestraTablero(Ficha[][] tablero){
         for(int i=0;i<3;i++){
             for(int j=0; j<3;j++){
                 if(tablero[i][j]==null){
-                    System.out.print("  -");
+                    System.out.print("   -");
                 }else{
-                    System.out.print("  "+tablero[i][j]);
+                    System.out.print("   "+tablero[i][j]);
                 }
                 
             }
@@ -311,10 +315,13 @@ public class Encerrado{
         }
     }
 
-    public void modo(){
-
-    }
-
+    /**
+     * Metodo para verificar qué fichas se pueden mover
+     * @param fichaAmover
+     * @param blanca
+     * @param tablero
+     * @return
+     */
     public static boolean verificaTirada(Ficha fichaAmover, Ficha blanca, Ficha[][] tablero ){
         //Posicion donde esta la ficha blanca (el unico lugar al que se puede mover una ficha)
         int PosDestinoX=blanca.posicionX;
@@ -418,16 +425,16 @@ public class Encerrado{
                         System.out.println("No hay movimientos disponibles para la computadora");
                         return "Jugador";
                     }
-                    System.out.println("Tablero despues de tirar");
-                    muestraTablero(tablero);
+                    //System.out.println("Tablero despues de tirar");
+                    //muestraTablero(tablero);
                 }else{
                     //si las dos fichas se pueden mover hacemos minimax
                     boolean pieza1=verificaTirada(rojos[0],blanca, tablero);
                     boolean pieza2=verificaTirada(rojos[1],blanca, tablero);
                     if(pieza1&&pieza2){
                         minimax(rojos,azules,tablero,blanca);
-                        System.out.println("Tablero despues de tirar");
-                        muestraTablero(tablero);
+                        //System.out.println("Tablero despues de tirar");
+                        //muestraTablero(tablero);
                     }else if(pieza1||pieza2){//si solo se puede mover una pieza la movemos
                         int aux=0;
                         if(pieza2){
@@ -466,11 +473,22 @@ public class Encerrado{
                         System.out.println("Elige el numero de la ficha que quieres mover");
                         try{
                             int r=sc.nextInt();
-                            if(r==1||r==2){
+                            if(r==-2){//Verificamos si se quiere cambiar el modo de juego
+                                System.out.print("Se cambiará el modo de juego a: ");
+                                if(modo.equals("random")){
+                                    System.out.println("minimax");
+                                    modo="minimax";
+                                }else{
+                                    System.out.println("random");
+                                    modo="random";
+                                }
+                                System.out.println();
+                            }else if(r==1||r==2){//verificamos si la ficha a mover es valida
                                 int aux=0;
                                 if(r==2){
                                     aux=1;
                                 }
+                                //actualizamos las posiciones del tablero y las posiciones de las piezas
                                 int posPiezaX=azules[aux].posicionX;
                                 int posPiezaY=azules[aux].posicionY;
                                 tablero[posPiezaX][posPiezaY]=blanca;
@@ -488,7 +506,7 @@ public class Encerrado{
                             sc.next();
                         }
                     }while(incorrecto);
-                }else if(pieza1||pieza2){//si solo una de las dos piezas azules se puede mover
+                }else if(pieza1||pieza2){//si solo una de las dos piezas azules se puede mover, solo damos la opcion de mover esa
                     System.out.println("Solo puedes mover una pieza. Presiona cualquier tecla seguida de enter para continuar");
                     sc2.nextLine();
                     int aux=0;//la posicion del arreglo
@@ -509,8 +527,8 @@ public class Encerrado{
                     System.out.println("No hay movimentos disponibles para el jugador");
                     return"Computadora";
                 }
-                System.out.println("Tablero despues de tirar");
-                muestraTablero(tablero);
+                //System.out.println("Tablero despues de tirar");
+                //muestraTablero(tablero);
                 actual=1;//ahora sera el turno de la computadora
             }
 
@@ -537,17 +555,19 @@ public class Encerrado{
         copiaAzules[1]=azules[1].clone();
         Ficha copiaBlanca=new Ficha("blanco",0,blanca.posicionX, blanca.posicionY);
 
+        //creamos el arbol y le asignamos raíz
         Arboljuego arbol=new Arboljuego();
         arbol.raiz=arbol.nuevoVertice(0);
+        //hacemos el metodo recursivo
         recursivo(arbol,copiaTablero,copiaRojos,copiaAzules,0,copiaBlanca, arbol.raiz);
-        System.out.println(arbol);
+        //System.out.println(arbol);
         int aux=0;//la posicion del arreglo
-        if(arbol.raiz.derecho.elemento==arbol.raiz.izquierdo.elemento){
+        if(arbol.raiz.derecho.elemento==arbol.raiz.izquierdo.elemento){//si ambos lados del arbol tienen el mismo numero, podemos irnos por cualquier lado
             Random random=new Random();
             if(random.nextBoolean()){
                 aux=1;
             }
-        }else if(arbol.raiz.derecho.elemento>arbol.raiz.izquierdo.elemento){
+        }else if(arbol.raiz.derecho.elemento>arbol.raiz.izquierdo.elemento){//si no, escogemos la ruta que más nos convenga
             aux=1;
         }
         int posPiezaX=rojos[aux].posicionX;
