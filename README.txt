@@ -1,5 +1,5 @@
 Estructuras de Datos
-Practica 3
+Proyecto 2: Encerrado
 
 Nombres:
 Fernández Blancas Melissa Lizbeth           319281778

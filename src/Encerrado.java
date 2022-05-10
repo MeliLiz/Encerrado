@@ -190,6 +190,9 @@ public class Encerrado{
                         sc.next();
                     }
                 }while(incorrecto);
+                System.out.println();
+                System.out.println("## Estrategia de juego inicial de la computadora: "+modo+" ##");
+                System.out.println();
                 String ganador=jugar(tablero, empieza, azules,rojos,blanca);
                 System.out.println("Ganador del juego: "+ganador);
 
