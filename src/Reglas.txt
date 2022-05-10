@@ -1,3 +1,37 @@
-Conectado
+*******************Conectado********************
 
-Reglas
+Bienvenido al juego "Conectado"
+
+Este juego consiste en lograr que las piezas del oponente ya no puedan moverse.
+Para jugar se requieren 4 fichas, dos para cada jugador y un tablero que
+posee los caminos por los que se puede mover cada ficha. El tablero consiste de 5
+espacios para colocar fichas, donde algunos de ellos están conectados.
+
+Al inicio del juego se colocan las fichas en las esquinas de forma alternada y se
+elige al jugador inicial.
+
+Los jugadores por turnos se irán alternando para mover una de sus fichas cumpliendo
+las siguientes reglas:
+
+1) Una ficha no puede moverse a espacios ocupados por otras fichas.
+2) Una ficha solo puede moverse a un espacio si hay un camino entre dichas fichas
+
+Si durante su turno un jugador no puede mover de manera legal ninguna de
+sus dos fichas, entonces ese jugador pierde la partida. El otro jugador es
+declarado ganador.
+
+En esta implementación el usuario se enfrentará en una partida contra la computadora.
+El usuario puede especificar si quiere jugr con la disposición inicial de fichas o con
+una distinta. También podrá determinar quíen comenzará el juego y qué estrategia inicial
+de la computadora desea (random o minimax).
+
+La computadora usará las fichas rojas y el jugador las azules.
+Durante el turno, el jugador sólo puede mover una de sus fichas hacia donde se encuentra la
+estrellita blanca.
+Si el jugador sólo puede mover una ficha se le indicará en la pantalla.
+Si el jugador puede mover sus dos fichas, deberá elegir el número de la ficha que se moverá.
+
+Recuerda que cuando sea tu turno puede cambiar el modo de juego de la computadora ingresando
+el número -2.
+
+¡Disfruta del juego!
