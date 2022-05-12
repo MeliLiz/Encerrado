@@ -307,10 +307,14 @@ public class Encerrado{
     public static void muestraTablero(Ficha[][] tablero){
         for(int i=0;i<3;i++){
             for(int j=0; j<3;j++){
-                if(tablero[i][j]==null){
-                    System.out.print("   -");
+                if(i==2&&j==1){
+                    System.out.print("    ");
+                }else if(i==0&&j==1){
+                    System.out.print("  ― ");
+                }else if(tablero[i][j]==null){
+                    System.out.print("   |");
                 }else{
-                    System.out.print("   "+tablero[i][j]);
+                    System.out.print("  "+tablero[i][j]);
                 }
                 
             }
