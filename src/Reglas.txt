@@ -31,7 +31,9 @@ estrellita blanca.
 Si el jugador sólo puede mover una ficha se le indicará en la pantalla.
 Si el jugador puede mover sus dos fichas, deberá elegir el número de la ficha que se moverá.
 
-Recuerda que cuando sea tu turno puede cambiar el modo de juego de la computadora ingresando
-el número -2.
+Recuerda que cuando sea tu turno y aparezca en pantalla "Elige el numero de la ficha que 
+quieres mover" puedes cambiar el modo de juego de la computadora ingresando el número -2
+o salir del juego ingresando el numero -5.
+
 
 ¡Disfruta del juego!

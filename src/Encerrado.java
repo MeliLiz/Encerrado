@@ -34,8 +34,8 @@ public class Encerrado{
         System.out.println("\n(1) Ver instrucciones");
         System.out.println("(2) Jugar");
         System.out.println("(3) Salir");
-        System.out.println("A lo largo del juego podrá teclear -2 para cambiar el modo de juego");
-        System.out.println("¡Disfrute el juego!");
+        System.out.println("A lo largo del juego cuando aparezca \"Elige el numero de la ficha que quieres mover\" podrás teclear -2 para cambiar el modo de juego o-5 para salir");
+        System.out.println("¡Disfruta el juego!");
 
         // Leer la respuesta
         boolean h = true;
@@ -308,17 +308,29 @@ public class Encerrado{
         for(int i=0;i<3;i++){
             for(int j=0; j<3;j++){
                 if(i==2&&j==1){
-                    System.out.print("    ");
+                    System.out.print("        ");
                 }else if(i==0&&j==1){
-                    System.out.print("  ― ");
+                    System.out.print("――――――――");
                 }else if(tablero[i][j]==null){
-                    System.out.print("   |");
-                }else{
-                    System.out.print("  "+tablero[i][j]);
+                    if(j==2&&!tablero[1][1].color.equals("blanco")){
+                        System.out.print("   |");
+                    }else{
+                        System.out.print("    |");
+                    }
+                    
+                }else if((i==0||i==2)&&j==2){
+                    System.out.print(tablero[i][j]);
                 }
-                
+                else{
+                    System.out.print("   "+tablero[i][j]);
+                }
             }
             System.out.println();
+            if(i==0){
+                System.out.println("    | ⸌    ⸍ |");
+            }else if(i==1){
+                System.out.println("    | ⸍    ⸌ |");
+            }
         }
     }
 
@@ -480,6 +492,10 @@ public class Encerrado{
                         System.out.println("Elige el numero de la ficha que quieres mover");
                         try{
                             int r=sc.nextInt();
+                            if(r==-5){
+                                System.out.println("Saliendo...");
+                                System.exit(0);
+                            }
                             if(r==-2){//Verificamos si se quiere cambiar el modo de juego
                                 System.out.print("Se cambiará el modo de juego a: ");
                                 if(modo.equals("random")){
@@ -514,7 +530,7 @@ public class Encerrado{
                         }
                     }while(incorrecto);
                 }else if(pieza1||pieza2){//si solo una de las dos piezas azules se puede mover, solo damos la opcion de mover esa
-                    System.out.println("Solo puedes mover una pieza. Presiona cualquier tecla seguida de enter para continuar");
+                    System.out.println("Solo puedes mover una pieza. Presiona enter para continuar");
                     sc2.nextLine();
                     int aux=0;//la posicion del arreglo
                     if(pieza2){
