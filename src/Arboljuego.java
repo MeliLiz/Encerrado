@@ -6,12 +6,7 @@ import java.util.Iterator;
 
 /**
  * <p>
- * Clase abstracta para árboles binarios genéricos.
- * </p>
- *
- * <p>
- * La clase proporciona las operaciones básicas para árboles binarios, pero
- * deja la implementación de varias en manos de las subclases concretas.
+ * Clase que crea un arbol simple de enteros.
  * </p>
  */
 public class Arboljuego{
